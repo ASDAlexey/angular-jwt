@@ -7,6 +7,20 @@
 <body ng-controller="MainCtrl as vm">
 <h1>Get randon user</h1>
 
+<form ng-submit="vm.login(vm.username,vm.password)">
+    <div>
+        <label>Username:</label>
+        <input type="text" ng-model="vm.username">
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="text" ng-model="vm.password">
+    </div>
+    <div>
+        <button type="submit">Login</button>
+    </div>
+</form>
+
 <div>
     <button ng-click="vm.getRandomUser()">Get user</button>
     <pre ng-bind="vm.randomUser | json"></pre>
