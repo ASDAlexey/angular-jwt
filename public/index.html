@@ -7,7 +7,8 @@
 <body ng-controller="MainCtrl as vm">
 <h1>Get randon user</h1>
 
-<form ng-submit="vm.login(vm.username,vm.password)">
+<form ng-hide="vm.user"
+      ng-submit="vm.login(vm.username,vm.password)">
     <div>
         <label>Username:</label>
         <input type="text" ng-model="vm.username">
@@ -21,8 +22,9 @@
     </div>
 </form>
 
-<div>
+<div ng-show="vm.user">
     <h2>Welcome {{vm.user.username}}</h2>
+
     <div>
         <button ng-click="vm.logout()">Logout</button>
     </div>

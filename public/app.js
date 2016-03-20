@@ -12,6 +12,13 @@
         vm.getRandomUser = getRandomUser;
         vm.login = login;
         vm.logout = logout;
+
+        //initialization
+        UserFactory.getUser().then(function(response){
+            vm.user = response.data;
+        });
+
+
         function getRandomUser(){
             RandomUserFactory.getUser().then(function(response){
                 vm.randomUser = response.data;
@@ -21,7 +28,6 @@
         function login(username, password){
             UserFactory.login(username, password).then(function(response){
                 vm.user = response.data.user;
-                console.log('token:' + response.data.token);
             }, handleError);
         }
 
@@ -44,7 +50,7 @@
             getUser: getUser
         }
     });
-    app.factory('UserFactory', function($http, API_URL, AuthTokenFactory){
+    app.factory('UserFactory', function($http, API_URL, AuthTokenFactory, $q){
         function login(username, password){
             return $http.post(API_URL + '/login', {
                 username: username,
@@ -59,9 +65,18 @@
             AuthTokenFactory.setToken();
         }
 
+        function getUser(){
+            if (AuthTokenFactory.getToken()) {
+                return $http.get(API_URL + '/me')
+            } else {
+                return $q.reject({data: 'Client has no auth token'});
+            }
+        }
+
         return {
             login: login,
-            logout: logout
+            logout: logout,
+            getUser: getUser
         }
     });
     app.factory('AuthTokenFactory', function($window){
